@@ -18,7 +18,7 @@ logic EOPn = 1;// internal signal coming from mode reg to inform if dma has to  
   assign IOR_N  = IF1.CS_N ? (dmaWrite ?  1'b0 : 1'b1) : 1'bz;
   assign MEMR_N= IF1.CS_N? (dmaRead ?  1'b0 : 1'b1) : 1'bz;
   assign IOW_N = IF1.CS_N ? (dmaRead ?  1'b0 : 1'b1) : 1'bz;
-  assign EOP_N=IF.TC ? 1'b0 :1'b1;
+  assign EOPn=IF.TC ? 1'b0 :1'b1;
  
 
 
@@ -72,9 +72,6 @@ logic EOPn = 1;// internal signal coming from mode reg to inform if dma has to  
                   IF1.HRQ = 1'b1;
                   IF1.AEN = 1'b0;
                   end
-
-      /*Active0   : begin
-                  end // doubts.*/
 
       Active1   : begin
                   IF1.ADSTB = (!EOPn ? 1'b0 : 1'b1);
