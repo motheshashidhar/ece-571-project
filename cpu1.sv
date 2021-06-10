@@ -18,99 +18,6 @@ module top;
 endmodule
 //interface definition
 
-interface dmaIF(input logic CLK, RESET);
-
-	// interface to 8086 processor
-	wire 	    IOR_N;		// IO read
-	wire 	    IOW_N;		// IO write
-	wire        MEMR_N;      // Memory read
-	wire        MEMW_N;      // memory write
-	logic 	    HLDA;		// Hold acknowledge
-	logic 	    HRQ;		// Hold request
-
-	// address and data bus interface
-	wire [7:0] ADDR;		//  A7-A0 of 8086 CPU
-                 	
-	wire  [7:0] DB;			// data
-	logic       CS_N; 		// Chip select 
-	
-
-	// Request and Acknowledge interface
-	logic [3:0] DREQ;		// asynchronous DMA channel request lines
-	logic [3:0] DACK;		// DMA acknowledge to indicate access granted to who has raised a request
-
-	// interface signal to 8-bit Latch
-	logic       ADSTB;		// Address strobe
-	logic       AEN;		// address enable
-	
-	// EOP signal
-	wire 	    EOP_N;		// bi-directional signal to end DMA active transfers
-
-	// modport for design
-	modport DUT(
-			inout  IOR_N,
-
-			inout  EOP_N,
-
-			input  DREQ,
-			input  HLDA,
-			input  CS_N,
-
-			
-			output DACK,
-			output HRQ,
-			output AEN,
-			output ADSTB
-	       	);
-	//modport for CPU
-	modport CPU(
-			inout  ADDR,
-			inout DB,
-			output IOR_N,
-			output IOW_N,
-			output CS_N,
-			output HLDA,
-      		input CLK,
-			input HRQ,
-      		input DREQ
-			);
-	
-	
-	// modport for Datapath
-	modport DP(
-			inout  IOR_N,
-			inout  IOW_N,
-			inout  DB,
-			inout  ADDR,
-			inout  EOP_N,
-			
-			output AEN,
-			output ADSTB
-    );
-	
-	// modport for Priority logic
-	modport PR(
-			output DACK,
-			output HRQ,	
-			input  DREQ,
-			input  HLDA		
-	);
-	
-	// modport for Timing Control logic
-	modport TC(
-			input  HLDA,
-			input  CS_N,
-			inout EOP_N
-	);
-	
-	modport REG(
-			inout  IOR_N,
-			inout  IOW_N,
-			input  CS_N
-	);
-
-
-endinterface
     
   
   module CPUM (dmaIF.CPU pins);
@@ -157,8 +64,8 @@ endinterface
         Mode_R=8'b10100100;  
       end
     
-    assign pins.ADDR = (!pins.CS_N)?DummyAddr:8'bzzzzzzzz;
-    assign pins.DB = (!pins.CS_N)?DummyDB:8'bzzzzzzzz;
+    assign pins.address = (!pins.CS_N)?DummyAddr:8'bzzzzzzzz;
+    assign pins.dataBus = (!pins.CS_N)?DummyDB:8'bzzzzzzzz;
     //assign pins.CS_N= (!pins.CS_N)?1'b1:1'bz;
     assign pins.IOR_N=(!pins.CS_N)?'0:1'bz;
     assign pins.IOW_N=(!pins.CS_N)?'1:1'bz;
