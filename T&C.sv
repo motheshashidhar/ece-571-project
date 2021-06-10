@@ -14,10 +14,10 @@ logic EOPn = 1;// internal signal coming from mode reg to inform if dma has to  
                   Active2=5'b01000,
                   Active4=5'b10000}State,NextState; //explicit enum definition.
 
-  assign MEMW_N = IF1.AEN ? (dmaWrite ?  1'b0 : 1'b1) : 1'bz; //.
-  assign IOR_N  = IF1.AEN ? (dmaWrite ?  1'b0 : 1'b1) : 1'bz;
-  assign MEMR_N= IF1.AEN ? (dmaRead ?  1'b0 : 1'b1) : 1'bz;
-  assign IOW_N = IF1.AEN ? (dmaRead ?  1'b0 : 1'b1) : 1'bz;
+  assign MEMW_N = IF1.CS_N ? (dmaWrite ?  1'b0 : 1'b1) : 1'bz; //.
+  assign IOR_N  = IF1.CS_N ? (dmaWrite ?  1'b0 : 1'b1) : 1'bz;
+  assign MEMR_N= IF1.CS_N? (dmaRead ?  1'b0 : 1'b1) : 1'bz;
+  assign IOW_N = IF1.CS_N ? (dmaRead ?  1'b0 : 1'b1) : 1'bz;
   assign EOP_N=IF.TC ? 1'b0 :1'b1;
  
 
