@@ -1,3 +1,4 @@
+// Code your design here
 interface dmaIF(input logic clk, rst);
 
   wire  [1:0]channelNo;					
@@ -19,7 +20,7 @@ interface dmaIF(input logic clk, rst);
   logic	ldLowerAddress;					
   logic ldTempRegister;					
   logic ldTempAddr;
-  logic PriorityGen;
+
 
 
   modport DataPath	(
@@ -46,6 +47,23 @@ interface dmaIF(input logic clk, rst);
     statusRegister,
     maskRegister								
   );
+  
+  modport timingcontrol  (
+  input
+	carrypresent,
+	TC,
+	clk,
+	rst,
+	isRead,
+  output 
+  ldUpperAddress
+	);
+	
+	modport prioritylogic  (
+	input 
+	requestRegister,
+	FixedPriority
+);	
   
 endinterface
 
